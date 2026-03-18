@@ -1,0 +1,146 @@
+{
+  "name": "CHAT BOT WEB",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "80006693-4c51-427d-b515-6786d58dde00",
+      "name": "When chat message received",
+      "webhookId": "65041790-36a3-4dcc-a15d-e4a316f4efb2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Kamu adalah sales profesional dari NF Academy.\n\nBerikut data produk:\n- Deskripsi: {{$json[\"Deskripsi\"]}}\n- Harga: {{$json[\"Harga\"]}}\n\nTugas kamu:\n- Jelaskan produk dengan bahasa menarik\n- Gunakan gaya santai tapi profesional\n- Ajak customer untuk tertarik membeli"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "21326486-2034-46f8-8cfe-575fefb4d0a8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "5343dd39-e5e8-4e2a-a00c-64ffd2b71bd5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eWVSwiDSwWL1REeM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "fe680a3c-1178-4165-b20a-7fb166a7bb9b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hryQwDSf743uuVmp",
+          "mode": "list",
+          "cachedResultName": "Data Harga dan barang",
+          "cachedResultUrl": "/projects/p4ktwA5dF5I4s9t2/datatables/hryQwDSf743uuVmp"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        192
+      ],
+      "id": "fb00fc86-03c0-459a-81c4-0208b098d30a",
+      "name": "Get row(s) in Data table"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in Data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "178e2968-479e-40e5-b4a6-7e812659408c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d3f76823f0165d0b44f2db3be45a7a6349e346dad0743173dfaeab2afb04b42"
+  },
+  "id": "UoWVXzeVwf48MZM7",
+  "tags": []
+}
